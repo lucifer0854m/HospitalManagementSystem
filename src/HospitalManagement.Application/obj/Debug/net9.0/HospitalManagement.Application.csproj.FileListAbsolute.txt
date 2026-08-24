@@ -1,0 +1,15 @@
+F:\HospitalManagementSystem\src\HospitalManagement.Application\bin\Debug\net9.0\HospitalManagement.Application.deps.json
+F:\HospitalManagementSystem\src\HospitalManagement.Application\bin\Debug\net9.0\HospitalManagement.Application.dll
+F:\HospitalManagementSystem\src\HospitalManagement.Application\bin\Debug\net9.0\HospitalManagement.Application.pdb
+F:\HospitalManagementSystem\src\HospitalManagement.Application\bin\Debug\net9.0\HospitalManagement.Domain.dll
+F:\HospitalManagementSystem\src\HospitalManagement.Application\bin\Debug\net9.0\HospitalManagement.Domain.pdb
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.csproj.AssemblyReference.cache
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.AssemblyInfoInputs.cache
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.AssemblyInfo.cs
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.csproj.CoreCompileInputs.cache
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\Hospital.86C33EBC.Up2Date
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.dll
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\refint\HospitalManagement.Application.dll
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\HospitalManagement.Application.pdb
+F:\HospitalManagementSystem\src\HospitalManagement.Application\obj\Debug\net9.0\ref\HospitalManagement.Application.dll

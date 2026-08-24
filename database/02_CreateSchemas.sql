@@ -1,0 +1,17 @@
+CREATE SCHEMA hr;
+GO
+
+CREATE SCHEMA pharmacy;
+GO
+
+CREATE SCHEMA lab;
+GO
+
+CREATE SCHEMA inventory;
+GO
+
+CREATE SCHEMA billing;
+GO
+
+CREATE SCHEMA audit;
+GO
