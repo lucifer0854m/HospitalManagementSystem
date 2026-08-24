@@ -1,0 +1,17 @@
+@model HospitalManagement.Application.DTOs.PatientDto
+@{
+    ViewData["Title"] = "Delete Patient";
+}
+
+<h2 class="mb-3 text-danger">Delete Patient</h2>
+<div class="alert alert-warning">This will permanently delete the patient record. This action cannot be undone.</div>
+<dl class="row">
+    <dt class="col-sm-3">Patient Code</dt><dd class="col-sm-9">@Model.PatientCode</dd>
+    <dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.FullName</dd>
+    <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">@Model.MobileNumber</dd>
+</dl>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete Patient</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

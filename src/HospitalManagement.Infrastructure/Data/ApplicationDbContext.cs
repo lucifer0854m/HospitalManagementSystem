@@ -24,6 +24,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Bill> Bills => Set<Bill>();
     public DbSet<BillItem> BillItems => Set<BillItem>();
     public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<LabTest> LabTests => Set<LabTest>();
+    public DbSet<LabRequest> LabRequests => Set<LabRequest>();
+    public DbSet<LabResult> LabResults => Set<LabResult>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

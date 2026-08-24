@@ -1,0 +1,3 @@
+@model HospitalManagement.Application.DTOs.AppointmentDto
+@{ ViewData["Title"] = "Delete Appointment"; }
+<h2 class="text-danger mb-3">Delete Appointment</h2><div class="alert alert-warning">This permanently deletes the appointment.</div><p><strong>@Model.AppointmentNumber</strong> — @Model.PatientName with Dr. @Model.DoctorName</p><form asp-action="Delete" method="post"><input type="hidden" asp-for="Id" /><button class="btn btn-danger">Delete Appointment</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a></form>

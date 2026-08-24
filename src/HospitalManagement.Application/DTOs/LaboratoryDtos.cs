@@ -1,0 +1,9 @@
+using HospitalManagement.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
+namespace HospitalManagement.Application.DTOs;
+public class LabTestDto { public int Id { get; set; } public string TestCode { get; set; } = string.Empty; public string TestName { get; set; } = string.Empty; public string? Category { get; set; } public decimal Price { get; set; } public string? NormalRange { get; set; } public bool IsActive { get; set; } }
+public class SaveLabTestDto { [Required, StringLength(20)] public string TestCode { get; set; } = string.Empty; [Required, StringLength(200)] public string TestName { get; set; } = string.Empty; public string? Category { get; set; } [Range(0,999999)] public decimal Price { get; set; } public string? NormalRange { get; set; } public bool IsActive { get; set; } = true; }
+public class CreateLabRequestDto { [Required, StringLength(20)] public string RequestNumber { get; set; } = string.Empty; [Range(1,int.MaxValue)] public int LabTestId { get; set; } [Range(1,int.MaxValue)] public int PatientId { get; set; } public int? AppointmentId { get; set; } public int? DoctorId { get; set; } }
+public class RecordLabResultDto { [Range(1,int.MaxValue)] public int LabRequestId { get; set; } [Required] public string ResultValue { get; set; } = string.Empty; public string? Remarks { get; set; } }
+public class DashboardDto { public int TotalPatients { get; set; } public int TotalDoctors { get; set; } public int TodayAppointments { get; set; } public int PendingLabRequests { get; set; } public decimal TodayRevenue { get; set; } }
+public class ReportDto { public DateTime From { get; set; } public DateTime To { get; set; } public int Appointments { get; set; } public int CompletedAppointments { get; set; } public int LabRequests { get; set; } public decimal BilledAmount { get; set; } public decimal PaidAmount { get; set; } }

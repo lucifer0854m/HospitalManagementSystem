@@ -4,7 +4,18 @@
     ViewData["Title"] = "Patients";
 }
 
-<h2 class="mb-4">Patients</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Patients</h2>
+    <a asp-action="Create" class="btn btn-primary">Add patient</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string message)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <table class="table table-bordered table-hover">
     <thead class="table-primary">
@@ -14,6 +25,7 @@
             <th>Gender</th>
             <th>Mobile</th>
             <th>Status</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
 
@@ -26,7 +38,12 @@
                 <td>@item.FullName</td>
                 <td>@item.Gender</td>
                 <td>@item.MobileNumber</td>
-                <td>@item.Status</td>
+            <td>@item.Status</td>
+            <td class="text-end">
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+            </td>
             </tr>
         }
 

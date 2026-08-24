@@ -25,7 +25,7 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.Property(x => x.Diagnosis)
             .HasMaxLength(1000);
 
-        builder.Property(x => x.Prescription)
+        builder.Property(x => x.PrescriptionNote)
             .HasMaxLength(2000);
 
         builder.Property(x => x.Notes)

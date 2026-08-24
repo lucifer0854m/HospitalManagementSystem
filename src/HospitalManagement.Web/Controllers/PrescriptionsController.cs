@@ -1,0 +1,14 @@
+using HospitalManagement.Application.DTOs;
+using HospitalManagement.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HospitalManagement.Web.Controllers;
+
+[ApiController]
+[Route("api/prescriptions")]
+public class PrescriptionsController : ControllerBase
+{
+    private readonly IPrescriptionService _prescriptions;
+    public PrescriptionsController(IPrescriptionService prescriptions) => _prescriptions = prescriptions;
+    [HttpPost] public async Task<IActionResult> Create(CreatePrescriptionDto dto) { try { var id=await _prescriptions.CreatePrescriptionAsync(dto); return Ok(new{id}); } catch(ArgumentException e){return BadRequest(new{e.Message});} }
+}

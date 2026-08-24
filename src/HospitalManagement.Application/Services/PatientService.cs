@@ -1,4 +1,3 @@
-using HospitalManagement.Domain.Entities;
 using AutoMapper;
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
@@ -39,7 +38,13 @@ public class PatientService : IPatientService
 
     public async Task CreateAsync(CreatePatientDto dto)
     {
+        await ValidatePatientAsync(dto.PatientCode, dto.DateOfBirth);
+
         var patient = _mapper.Map<Patient>(dto);
+        patient.PatientCode = dto.PatientCode.Trim();
+        patient.FirstName = dto.FirstName.Trim();
+        patient.LastName = dto.LastName.Trim();
+        patient.CreatedOn = DateTime.UtcNow;
 
         await _patientRepository.AddAsync(patient);
 
@@ -51,9 +56,15 @@ public class PatientService : IPatientService
         var patient = await _patientRepository.GetByIdAsync(dto.Id);
 
         if (patient == null)
-            throw new Exception("Patient not found.");
+            throw new KeyNotFoundException("Patient not found.");
+
+        await ValidatePatientAsync(dto.PatientCode, dto.DateOfBirth, dto.Id);
 
         _mapper.Map(dto, patient);
+        patient.PatientCode = dto.PatientCode.Trim();
+        patient.FirstName = dto.FirstName.Trim();
+        patient.LastName = dto.LastName.Trim();
+        patient.ModifiedOn = DateTime.UtcNow;
 
         _patientRepository.Update(patient);
 
@@ -65,10 +76,23 @@ public class PatientService : IPatientService
         var patient = await _patientRepository.GetByIdAsync(id);
 
         if (patient == null)
-            throw new Exception("Patient not found.");
+            throw new KeyNotFoundException("Patient not found.");
 
         _patientRepository.Delete(patient);
 
         await _patientRepository.SaveChangesAsync();
+    }
+
+    private async Task ValidatePatientAsync(string patientCode, DateTime dateOfBirth, int? currentPatientId = null)
+    {
+        if (string.IsNullOrWhiteSpace(patientCode))
+            throw new ArgumentException("Patient code is required.");
+
+        if (dateOfBirth.Date > DateTime.UtcNow.Date)
+            throw new ArgumentException("Date of birth cannot be in the future.");
+
+        var existingPatient = await _patientRepository.GetByPatientCodeAsync(patientCode.Trim());
+        if (existingPatient is not null && existingPatient.Id != currentPatientId)
+            throw new InvalidOperationException("A patient with this patient code already exists.");
     }
 }

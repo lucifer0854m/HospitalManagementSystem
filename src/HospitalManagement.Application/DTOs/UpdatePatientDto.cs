@@ -26,6 +26,9 @@ public class UpdatePatientDto
     public DateTime DateOfBirth { get; set; }
 
     [Required]
+    public BloodGroup BloodGroup { get; set; }
+
+    [Required]
     [StringLength(15)]
     public string MobileNumber { get; set; } = string.Empty;
 
@@ -41,4 +44,25 @@ public class UpdatePatientDto
     public string? Country { get; set; }
 
     public string? Pincode { get; set; }
+
+    [StringLength(100)]
+    public string? EmergencyContactName { get; set; }
+
+    [StringLength(15)]
+    public string? EmergencyContactNumber { get; set; }
+
+    [StringLength(100)]
+    public string? EmergencyContactRelation { get; set; }
+
+    [Range(0, 999.99)]
+    public decimal Height { get; set; }
+
+    [Range(0, 999.99)]
+    public decimal Weight { get; set; }
+
+    public string? Allergies { get; set; }
+
+    public string? MedicalHistory { get; set; }
+
+    public PatientStatus Status { get; set; }
 }
