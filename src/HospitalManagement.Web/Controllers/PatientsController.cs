@@ -1,10 +1,13 @@
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
 using HospitalManagement.Domain.Enums;
+using HospitalManagement.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Web.Controllers;
 
+[Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Doctor + "," + HospitalRoles.Receptionist)]
 public class PatientsController : Controller
 {
     private readonly IPatientService _patientService;

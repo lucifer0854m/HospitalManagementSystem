@@ -36,96 +36,25 @@
                 <div class="collapse navbar-collapse" id="navbar">
 
                     <ul class="navbar-nav me-auto">
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-
-                                <i class="bi bi-house"></i>
-                                Dashboard
-
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Patients"
-                               asp-action="Index">
-
-                                <i class="bi bi-person"></i>
-                                Patients
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Departments"
-                               asp-action="Index">
-
-                                <i class="bi bi-building"></i>
-                                Departments
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Doctors"
-                               asp-action="Index">
-
-                                <i class="bi bi-heart-pulse"></i>
-                                Doctors
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Appointments"
-                               asp-action="Index">
-
-                                <i class="bi bi-calendar-check"></i>
-                                Appointments
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Billing"
-                               asp-action="Index">
-
-                                <i class="bi bi-receipt"></i>
-                                Billing
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Reports"
-                               asp-action="Index">
-
-                                <i class="bi bi-bar-chart"></i>
-                                Reports
-
-                            </a>
-
-                        </li>
-
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Dashboard</a></li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Receptionist"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Patients" asp-action="Index"><i class="bi bi-person"></i> Patients</a></li> }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Receptionist"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Departments" asp-action="Index"><i class="bi bi-building"></i> Departments</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Doctors" asp-action="Index"><i class="bi bi-heart-pulse"></i> Doctors</a></li>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Receptionist"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Appointments" asp-action="Index"><i class="bi bi-calendar-check"></i> Appointments</a></li> }
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @if (User.IsInRole("Admin"))
+                            { <li class="nav-item"><a class="nav-link" asp-controller="Users" asp-action="Index"><i class="bi bi-people"></i> Users</a></li> }
+                            <li class="nav-item"><span class="navbar-text me-2">@User.Identity.Name</span></li>
+                            <li class="nav-item"><form asp-controller="Account" asp-action="Logout" method="post"><button class="btn btn-link nav-link" type="submit">Sign out</button></form></li>
+                        }
                     </ul>
 
                 </div>

@@ -1,7 +1,10 @@
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
+using HospitalManagement.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace HospitalManagement.Web.Controllers;
+[Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Doctor + "," + HospitalRoles.LabTechnician)]
 [ApiController, Route("api/laboratory")]
 public class LaboratoryController : ControllerBase
 {

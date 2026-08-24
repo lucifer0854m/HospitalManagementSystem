@@ -1,9 +1,12 @@
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
+using HospitalManagement.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Web.Controllers;
 
+[Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Doctor)]
 [ApiController]
 [Route("api/prescriptions")]
 public class PrescriptionsController : ControllerBase

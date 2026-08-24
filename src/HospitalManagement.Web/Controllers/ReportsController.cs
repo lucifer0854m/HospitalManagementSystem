@@ -1,6 +1,9 @@
 using HospitalManagement.Application.Interfaces;
+using HospitalManagement.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace HospitalManagement.Web.Controllers;
+[Authorize(Roles = HospitalRoles.Admin)]
 [ApiController, Route("api/reports")]
 public class ReportsController : ControllerBase
 {

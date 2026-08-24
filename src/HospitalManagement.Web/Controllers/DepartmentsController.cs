@@ -1,9 +1,12 @@
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using HospitalManagement.Infrastructure.Identity;
 
 namespace HospitalManagement.Web.Controllers;
 
+[Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Receptionist)]
 public class DepartmentsController : Controller
 {
     private readonly IDepartmentService _departmentService;

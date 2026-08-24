@@ -3,10 +3,13 @@ using HospitalManagement.Application.Interfaces;
 using HospitalManagement.Domain.Entities;
 using HospitalManagement.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using HospitalManagement.Infrastructure.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HospitalManagement.Web.Controllers;
 
+[Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Receptionist)]
 public class DoctorsController : Controller
 {
     private readonly IDoctorService _doctorService;
