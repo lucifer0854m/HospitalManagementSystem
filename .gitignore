@@ -1,0 +1,315 @@
+# ============================================================
+
+# Hospital Management System
+
+# .NET / Visual Studio / SQL Server / Docker
+
+# ============================================================
+
+# ------------------------------------------------------------
+
+# Visual Studio
+
+# ------------------------------------------------------------
+
+.vs/
+.vscode/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache
+
+.vsconfig
+
+# ------------------------------------------------------------
+
+# Build output
+
+# ------------------------------------------------------------
+
+[Bb]in/
+[Oo]bj/
+
+# Generated build files
+
+*.dll
+*.exe
+*.pdb
+*.cache
+*.ilk
+*.tmp
+
+# ------------------------------------------------------------
+
+# .NET
+
+# ------------------------------------------------------------
+
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet
+
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# NuGet generated files
+
+**/obj/project.assets.json
+**/obj/project.nuget.cache
+**/obj/*.nuget.g.props
+**/obj/*.nuget.g.targets
+
+# ------------------------------------------------------------
+
+# Test results
+
+# ------------------------------------------------------------
+
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# ------------------------------------------------------------
+
+# ASP.NET Core
+
+# ------------------------------------------------------------
+
+wwwroot/lib/
+
+# ASP.NET generated files
+
+*.generated.cs
+
+# ------------------------------------------------------------
+
+# Entity Framework Core
+
+# ------------------------------------------------------------
+
+# Local EF migration/database artifacts
+
+*.db
+*.db-shm
+*.db-wal
+
+# ------------------------------------------------------------
+
+# Application configuration / secrets
+
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# Local secrets
+
+secrets.json
+secrets.*.json
+
+# User-specific configuration
+
+appsettings.Local.json
+
+# Do NOT ignore the normal shared configuration files:
+
+# appsettings.json
+
+# appsettings.Development.json
+
+# appsettings.Production.json
+
+#
+
+# If these files contain secrets, remove the secrets and use
+
+# environment variables or Secret Manager instead.
+
+# ------------------------------------------------------------
+
+# SQL Server / database local files
+
+# ------------------------------------------------------------
+
+*.mdf
+*.ndf
+*.ldf
+
+# SQL Server backup files
+
+*.bak
+*.trn
+
+# ------------------------------------------------------------
+
+# Logs
+
+# ------------------------------------------------------------
+
+*.log
+logs/
+Log/
+log/
+
+# ------------------------------------------------------------
+
+# OS generated files
+
+# ------------------------------------------------------------
+
+# Windows
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+
+*~
+
+# ------------------------------------------------------------
+
+# Rider / JetBrains
+
+# ------------------------------------------------------------
+
+.idea/
+*.sln.iml
+
+# ------------------------------------------------------------
+
+# ReSharper
+
+# ------------------------------------------------------------
+
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# ------------------------------------------------------------
+
+# Visual Studio Code
+
+# ------------------------------------------------------------
+
+.history/
+
+# ------------------------------------------------------------
+
+# Docker
+
+# ------------------------------------------------------------
+
+docker-compose.override.yml
+.docker/
+
+# Docker environment files
+
+docker.env
+docker-compose.env
+
+# ------------------------------------------------------------
+
+# Coverage / profiling
+
+# ------------------------------------------------------------
+
+coverage/
+coverage.*
+*.coverage
+*.opencover.xml
+
+# ------------------------------------------------------------
+
+# Generated documentation
+
+# ------------------------------------------------------------
+
+*.user.md
+
+# ------------------------------------------------------------
+
+# Temporary files
+
+# ------------------------------------------------------------
+
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
+*.swo
+
+# ------------------------------------------------------------
+
+# Publish output
+
+# ------------------------------------------------------------
+
+publish/
+Publish/
+*.publishsettings
+
+# ------------------------------------------------------------
+
+# Azure / deployment local files
+
+# ------------------------------------------------------------
+
+.azure/
+.azure-dev/
+
+# ------------------------------------------------------------
+
+# Node.js tooling if frontend tooling is added later
+
+# ------------------------------------------------------------
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ------------------------------------------------------------
+
+# Python tooling if scripts are added later
+
+# ------------------------------------------------------------
+
+**pycache**/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# ------------------------------------------------------------
+
+# Keep important project files
+
+# ------------------------------------------------------------
+
+!.gitignore
+!README.md
+!LICENSE
+!docker-compose.yml
+!*.csproj
+!*.sln
