@@ -54,6 +54,8 @@
                         { <li class="nav-item"><a class="nav-link" asp-controller="Pharmacy" asp-action="Index"><i class="bi bi-capsule"></i> Pharmacy</a></li> }
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("LabTechnician"))
                         { <li class="nav-item"><a class="nav-link" asp-controller="Laboratory" asp-action="Index"><i class="bi bi-virus"></i> Laboratory</a></li> }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Prescriptions" asp-action="Index"><i class="bi bi-file-earmark-medical"></i> Prescriptions</a></li> }
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity?.IsAuthenticated == true)

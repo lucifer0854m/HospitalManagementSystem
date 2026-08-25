@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Patient> Patients => Set<Patient>();
     public DbSet<Medicine> Medicines => Set<Medicine>();
     public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<AuditEvent> AuditEvents => Set<AuditEvent>();
 
     // Transactions
     public DbSet<Appointment> Appointments => Set<Appointment>();

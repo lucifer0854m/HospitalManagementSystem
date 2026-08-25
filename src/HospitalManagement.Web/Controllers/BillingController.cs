@@ -18,6 +18,7 @@ public class BillingController : Controller
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateBillDto model)
     {
+        if (model.Items.Count == 0) ModelState.AddModelError(nameof(model.Items), "Add at least one bill item.");
         if (!ModelState.IsValid) return View("Index", await BuildIndexAsync(model));
         try { await _billing.CreateBillAsync(model); TempData["SuccessMessage"] = "Bill created successfully."; return RedirectToAction(nameof(Index)); }
         catch (Exception e) when (e is ArgumentException or InvalidOperationException) { ModelState.AddModelError(string.Empty, e.Message); return View("Index", await BuildIndexAsync(model)); }

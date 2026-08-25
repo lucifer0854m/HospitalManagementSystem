@@ -53,47 +53,33 @@ The application follows a layered architecture to separate business logic, domai
 
 ### 💊 Prescription Management
 
-* Maintain prescription information
-* Associate prescriptions with appointments
-* Store medication-related information
+* Create multi-medicine prescriptions linked to appointments
+* Validate that the selected patient and doctor match the appointment
+* View prescription history and full medicine instructions
 
 ### 💰 Billing
 
-Planned/ongoing module for:
-
-* Patient billing
-* Invoice management
-* Payment tracking
-* Billing reports
+* Create itemized patient bills
+* Record partial and full payments with payment method and reference
+* Prevent overpayments and track outstanding balances
 
 ### 💊 Pharmacy
 
-Planned/ongoing module for:
-
-* Medicine management
-* Medicine inventory
-* Stock tracking
-* Prescription-based medicine handling
+* Manage medicines and inventory batches
+* Edit medicine and inventory details
+* Highlight low-stock inventory
 
 ### 🧪 Laboratory
 
-Planned/ongoing module for:
-
-* Laboratory tests
-* Test requests
-* Test results
-* Patient laboratory history
+* Manage laboratory test definitions
+* Create patient test requests and record results
+* Track request status and test history
 
 ### 📊 Reports
 
-Planned/ongoing reporting capabilities include:
-
-* Patient reports
-* Doctor reports
-* Appointment reports
-* Billing reports
-* Pharmacy reports
-* Laboratory reports
+* Dashboard with patient, doctor, appointment, laboratory, and revenue metrics
+* Date-range operational and financial summary
+* CSV export for date-range summaries
 
 ---
 
@@ -597,27 +583,27 @@ Example:
 
 ### Phase 2 — Core Modules
 
-* [ ] Patient management
-* [ ] Doctor management
-* [ ] Department management
-* [ ] Appointment management
-* [ ] Prescription management
+* [x] Patient management
+* [x] Doctor management
+* [x] Department management
+* [x] Appointment management
+* [x] Prescription management
 
 ### Phase 3 — Extended Modules
 
-* [ ] Billing
-* [ ] Pharmacy
-* [ ] Laboratory
-* [ ] Reports
-* [ ] Dashboard
+* [x] Billing
+* [x] Pharmacy
+* [x] Laboratory
+* [x] Reports
+* [x] Dashboard
 
 ### Phase 4 — Security
 
-* [ ] Authentication
-* [ ] Authorization
-* [ ] Role-based access control
-* [ ] Secure configuration
-* [ ] Audit logging
+* [x] Authentication
+* [x] Authorization
+* [x] Role-based access control
+* [x] Secure configuration
+* [x] Audit logging for authenticated write operations (without request-body capture)
 
 ### Phase 5 — Quality
 

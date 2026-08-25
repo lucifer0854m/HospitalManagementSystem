@@ -88,6 +88,36 @@ app.Use(async (context, next) =>
     }
 });
 
+app.Use(async (context, next) =>
+{
+    try { await next(); }
+    finally
+    {
+        if (context.User.Identity?.IsAuthenticated == true && !HttpMethods.IsGet(context.Request.Method) && !HttpMethods.IsHead(context.Request.Method) && !context.Request.Path.StartsWithSegments("/health"))
+        {
+            try
+            {
+                var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+                db.AuditEvents.Add(new HospitalManagement.Domain.Entities.AuditEvent
+                {
+                    OccurredOn = DateTime.UtcNow,
+                    UserId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
+                    UserName = context.User.Identity.Name,
+                    Method = context.Request.Method,
+                    Path = context.Request.Path.Value ?? "/",
+                    StatusCode = context.Response.StatusCode,
+                    RemoteIpAddress = context.Connection.RemoteIpAddress?.ToString()
+                });
+                await db.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                app.Logger.LogError(exception, "Unable to persist audit event for {Method} {Path}", context.Request.Method, context.Request.Path);
+            }
+        }
+    }
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -10,6 +10,8 @@ Run the project verification command before every pull request or release:
 
 It restores packages, builds the complete solution in Release configuration, and runs the automated test suite. Add `-Coverage` to also generate a Cobertura coverage report under `src/HospitalManagement.Tests/TestResults`.
 
+The current suite contains 21 tests: application-service validation and retrieval rules plus security/integration coverage for authentication redirects, API authorization, health endpoints, and response security headers.
+
 ## Current coverage focus
 
 The unit suite covers high-value application-service rules:
@@ -17,7 +19,7 @@ The unit suite covers high-value application-service rules:
 - Patient-code uniqueness, future date-of-birth rejection, and persisted data normalization
 - Department-code uniqueness and safe deletion when doctors are assigned
 - Appointment conflict prevention, past-date rejection, and persisted appointment-number normalization
-- Billing patient and payment validation, pharmacy duplicate/expiry validation, laboratory request/result validation, reporting calculations, and authorization/health integration paths
+- Billing patient and payment validation, pharmacy duplicate/expiry and record retrieval validation, laboratory request/result and test retrieval validation, prescription appointment consistency, reporting calculations, and authorization/health integration paths
 
 ## Performance and logging
 

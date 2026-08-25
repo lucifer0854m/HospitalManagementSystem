@@ -9,6 +9,48 @@ namespace HospitalManagement.Tests;
 public class ExtendedModuleServiceTests
 {
     [Fact]
+    public async Task CreatePrescriptionAsync_RejectsPatientOrDoctorThatDoesNotMatchAppointment()
+    {
+        var appointments = new Mock<IGenericRepository<Appointment>>();
+        var patients = new Mock<IGenericRepository<Patient>>();
+        var doctors = new Mock<IGenericRepository<Doctor>>();
+        appointments.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(new Appointment { Id = 1, PatientId = 2, DoctorId = 3 });
+        patients.Setup(x => x.ExistsAsync(9)).ReturnsAsync(true);
+        doctors.Setup(x => x.ExistsAsync(3)).ReturnsAsync(true);
+        var service = new PrescriptionService(Mock.Of<IGenericRepository<Prescription>>(), Mock.Of<IGenericRepository<PrescriptionItem>>(), appointments.Object, patients.Object, doctors.Object, Mock.Of<IGenericRepository<Medicine>>());
+
+        await Assert.ThrowsAsync<ArgumentException>(() => service.CreatePrescriptionAsync(new CreatePrescriptionDto { AppointmentId = 1, PatientId = 9, DoctorId = 3, Items = [new PrescriptionLineDto { MedicineId = 1, Dosage = "1 tablet", Frequency = "Daily", DurationInDays = 3 }] }));
+    }
+
+    [Fact]
+    public async Task GetMedicineByIdAsync_ReturnsMedicineDetails()
+    {
+        var medicines = new Mock<IGenericRepository<Medicine>>();
+        medicines.Setup(x => x.GetByIdAsync(4)).ReturnsAsync(new Medicine { Id = 4, MedicineCode = "MED-004", MedicineName = "Paracetamol", Unit = "Tablet", UnitPrice = 5, IsActive = true });
+        var service = new PharmacyService(medicines.Object, Mock.Of<IGenericRepository<Inventory>>());
+
+        var result = await service.GetMedicineByIdAsync(4);
+
+        Assert.NotNull(result);
+        Assert.Equal("Paracetamol", result.MedicineName);
+        Assert.Equal("MED-004", result.MedicineCode);
+    }
+
+    [Fact]
+    public async Task GetTestByIdAsync_ReturnsTestDetails()
+    {
+        var tests = new Mock<IGenericRepository<LabTest>>();
+        tests.Setup(x => x.GetByIdAsync(5)).ReturnsAsync(new LabTest { Id = 5, TestCode = "LAB-005", TestName = "Blood Count", Price = 250, IsActive = true });
+        var service = new LaboratoryService(tests.Object, Mock.Of<IGenericRepository<LabRequest>>(), Mock.Of<IGenericRepository<LabResult>>(), Mock.Of<IGenericRepository<Patient>>(), Mock.Of<IGenericRepository<Appointment>>(), Mock.Of<IGenericRepository<Doctor>>());
+
+        var result = await service.GetTestByIdAsync(5);
+
+        Assert.NotNull(result);
+        Assert.Equal("Blood Count", result.TestName);
+        Assert.Equal("LAB-005", result.TestCode);
+    }
+
+    [Fact]
     public async Task CreateBillAsync_RejectsUnknownPatient()
     {
         var patients = new Mock<IGenericRepository<Patient>>();

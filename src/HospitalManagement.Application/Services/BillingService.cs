@@ -17,6 +17,7 @@ public class BillingService : IBillingService
     }
     public async Task<int> CreateBillAsync(CreateBillDto dto)
     {
+        if (dto.Items.Count == 0) throw new ArgumentException("Add at least one bill item.");
         if (!await _patients.ExistsAsync(dto.PatientId)) throw new ArgumentException("Select a valid patient."); if (dto.AppointmentId.HasValue && !await _appointments.ExistsAsync(dto.AppointmentId.Value)) throw new ArgumentException("Select a valid appointment.");
         if ((await _bills.FindAsync(x=>x.BillNumber==dto.BillNumber.Trim())).Any()) throw new InvalidOperationException("A bill with this number already exists.");
         var total=dto.Items.Sum(x=>x.Quantity*x.UnitPrice); if(dto.Discount>total+dto.TaxAmount) throw new ArgumentException("Discount cannot exceed the bill total.");
