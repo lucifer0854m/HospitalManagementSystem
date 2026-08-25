@@ -1,0 +1,6 @@
+{
+  "HospitalManagement.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\HospitalManagementSystem\\src\\HospitalManagement.Application",
+  "HospitalManagement.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\HospitalManagementSystem\\src\\HospitalManagement.Domain",
+  "HospitalManagement.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\HospitalManagementSystem\\src\\HospitalManagement.Infrastructure",
+  "HospitalManagement.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\HospitalManagementSystem\\src\\HospitalManagement.Web"
+}

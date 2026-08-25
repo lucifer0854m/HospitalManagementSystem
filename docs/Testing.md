@@ -17,6 +17,13 @@ The unit suite covers high-value application-service rules:
 - Patient-code uniqueness, future date-of-birth rejection, and persisted data normalization
 - Department-code uniqueness and safe deletion when doctors are assigned
 - Appointment conflict prevention, past-date rejection, and persisted appointment-number normalization
+- Billing patient and payment validation, pharmacy duplicate/expiry validation, laboratory request/result validation, reporting calculations, and authorization/health integration paths
+
+## Performance and logging
+
+- Repository list and search queries use `AsNoTracking()` so read-only screens do not retain unnecessary EF Core change-tracking state.
+- Every request produces structured JSON log fields for method, path, status code, and elapsed time. Container and cloud platforms can collect standard output directly.
+- Run `./scripts/verify.ps1 -Coverage` before releases and track the Cobertura report in the CI quality gate appropriate for your organization.
 
 ## Manual QA checklist
 

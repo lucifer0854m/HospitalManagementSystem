@@ -1,0 +1,31 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: Image tag to deploy (defaults to latest)
+        required: false
+        default: latest
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+      - uses: azure/k8s-deploy@v5
+        with:
+          manifests: |
+            k8s/configmap.yaml
+            k8s/service.yaml
+            k8s/deployment.yaml
+            k8s/hpa.yaml
+          images: ghcr.io/${{ github.repository_owner }}/hospital-management-system:${{ inputs.image_tag }}

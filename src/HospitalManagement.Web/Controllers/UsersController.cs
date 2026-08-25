@@ -3,6 +3,7 @@ using HospitalManagement.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagement.Web.Controllers;
 
@@ -14,8 +15,18 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index()
     {
+        var usersList = await _userManager.Users
+            .OrderBy(x => x.Email)
+            .ToListAsync();
+
         var users = new List<(ApplicationUser User, IList<string> Roles)>();
-        foreach (var user in _userManager.Users.OrderBy(x => x.Email)) users.Add((user, await _userManager.GetRolesAsync(user)));
+
+        foreach (var user in usersList)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            users.Add((user, roles));
+        }
+
         return View(users);
     }
 

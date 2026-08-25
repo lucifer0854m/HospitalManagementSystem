@@ -1,0 +1,13 @@
+@model HospitalManagement.Application.DTOs.DashboardDto
+@{ ViewData["Title"] = "Reports dashboard"; }
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div><h1 class="h3 mb-1">Reports dashboard</h1><p class="text-muted mb-0">Live hospital activity for today.</p></div>
+    <a asp-action="Summary" class="btn btn-primary"><i class="bi bi-file-earmark-bar-graph"></i> Date-range summary</a>
+</div>
+<div class="row g-3">
+    <div class="col-md-6 col-xl-3"><div class="card border-primary h-100"><div class="card-body"><div class="text-muted small">Total patients</div><div class="display-6">@Model.TotalPatients</div></div></div></div>
+    <div class="col-md-6 col-xl-3"><div class="card border-success h-100"><div class="card-body"><div class="text-muted small">Total doctors</div><div class="display-6">@Model.TotalDoctors</div></div></div></div>
+    <div class="col-md-6 col-xl-3"><div class="card border-info h-100"><div class="card-body"><div class="text-muted small">Today's appointments</div><div class="display-6">@Model.TodayAppointments</div></div></div></div>
+    <div class="col-md-6 col-xl-3"><div class="card border-warning h-100"><div class="card-body"><div class="text-muted small">Pending lab requests</div><div class="display-6">@Model.PendingLabRequests</div></div></div></div>
+    <div class="col-md-12"><div class="card border-dark"><div class="card-body"><div class="text-muted small">Today's collected revenue</div><div class="display-5">@Model.TodayRevenue.ToString("N2")</div></div></div></div>
+</div>

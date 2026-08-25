@@ -46,6 +46,14 @@
                         }
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Receptionist"))
                         { <li class="nav-item"><a class="nav-link" asp-controller="Appointments" asp-action="Index"><i class="bi bi-calendar-check"></i> Appointments</a></li> }
+                        @if (User.IsInRole("Admin"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Reports" asp-action="Index"><i class="bi bi-bar-chart"></i> Reports</a></li> }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Receptionist"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Billing" asp-action="Index"><i class="bi bi-receipt"></i> Billing</a></li> }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Pharmacist"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Pharmacy" asp-action="Index"><i class="bi bi-capsule"></i> Pharmacy</a></li> }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("LabTechnician"))
+                        { <li class="nav-item"><a class="nav-link" asp-controller="Laboratory" asp-action="Index"><i class="bi bi-virus"></i> Laboratory</a></li> }
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity?.IsAuthenticated == true)

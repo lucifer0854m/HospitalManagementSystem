@@ -1,23 +1,20 @@
 using HospitalManagement.Application.DTOs;
 using HospitalManagement.Application.Interfaces;
 using HospitalManagement.Infrastructure.Identity;
+using HospitalManagement.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Web.Controllers;
 
 [Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Pharmacist)]
-[ApiController]
-[Route("api/pharmacy")]
-public class PharmacyController : ControllerBase
+public class PharmacyController : Controller
 {
     private readonly IPharmacyService _pharmacy;
     public PharmacyController(IPharmacyService pharmacy) => _pharmacy = pharmacy;
-    [HttpGet("medicines")] public async Task<IActionResult> Medicines() => Ok(await _pharmacy.GetMedicinesAsync());
-    [HttpPost("medicines")] public async Task<IActionResult> SaveMedicine(SaveMedicineDto dto) { try { var id=await _pharmacy.SaveMedicineAsync(dto); return CreatedAtAction(nameof(Medicines),new{id},new{id}); } catch(InvalidOperationException e){return Conflict(new{e.Message});} }
-    [HttpPut("medicines/{id:int}")] public async Task<IActionResult> UpdateMedicine(int id, SaveMedicineDto dto) { try { await _pharmacy.SaveMedicineAsync(dto,id); return NoContent(); } catch(KeyNotFoundException){return NotFound();} catch(InvalidOperationException e){return Conflict(new{e.Message});} }
-    [HttpGet("inventory")] public async Task<IActionResult> Inventory() => Ok(await _pharmacy.GetInventoryAsync());
-    [HttpGet("inventory/low-stock")] public async Task<IActionResult> LowStock() => Ok(await _pharmacy.GetLowStockAsync());
-    [HttpPost("inventory")] public async Task<IActionResult> SaveInventory(SaveInventoryDto dto) { try { var id=await _pharmacy.SaveInventoryAsync(dto); return Ok(new{id}); } catch(ArgumentException e){return BadRequest(new{e.Message});} }
-    [HttpPut("inventory/{id:int}")] public async Task<IActionResult> UpdateInventory(int id, SaveInventoryDto dto) { try { await _pharmacy.SaveInventoryAsync(dto,id); return NoContent(); } catch(KeyNotFoundException){return NotFound();} catch(ArgumentException e){return BadRequest(new{e.Message});} }
+    public async Task<IActionResult> Index() => View(new PharmacyIndexViewModel { Medicines = await _pharmacy.GetMedicinesAsync(), Inventory = await _pharmacy.GetInventoryAsync(), LowStock = await _pharmacy.GetLowStockAsync() });
+    public IActionResult CreateMedicine() => View(new SaveMedicineDto());
+    [HttpPost, ValidateAntiForgeryToken] public async Task<IActionResult> CreateMedicine(SaveMedicineDto model) { if (!ModelState.IsValid) return View(model); try { await _pharmacy.SaveMedicineAsync(model); TempData["SuccessMessage"] = "Medicine saved."; return RedirectToAction(nameof(Index)); } catch (InvalidOperationException e) { ModelState.AddModelError(string.Empty, e.Message); return View(model); } }
+    public async Task<IActionResult> CreateInventory() { ViewBag.Medicines = await _pharmacy.GetMedicinesAsync(); return View(new SaveInventoryDto()); }
+    [HttpPost, ValidateAntiForgeryToken] public async Task<IActionResult> CreateInventory(SaveInventoryDto model) { if (!ModelState.IsValid) { ViewBag.Medicines = await _pharmacy.GetMedicinesAsync(); return View(model); } try { await _pharmacy.SaveInventoryAsync(model); TempData["SuccessMessage"] = "Inventory saved."; return RedirectToAction(nameof(Index)); } catch (ArgumentException e) { ViewBag.Medicines = await _pharmacy.GetMedicinesAsync(); ModelState.AddModelError(string.Empty, e.Message); return View(model); } }
 }

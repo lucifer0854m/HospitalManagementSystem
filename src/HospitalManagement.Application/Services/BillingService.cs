@@ -9,6 +9,12 @@ public class BillingService : IBillingService
 {
     private readonly IGenericRepository<Bill> _bills; private readonly IGenericRepository<BillItem> _billItems; private readonly IGenericRepository<Payment> _payments; private readonly IGenericRepository<Patient> _patients; private readonly IGenericRepository<Appointment> _appointments;
     public BillingService(IGenericRepository<Bill> bills, IGenericRepository<BillItem> billItems, IGenericRepository<Payment> payments, IGenericRepository<Patient> patients, IGenericRepository<Appointment> appointments) => (_bills,_billItems,_payments,_patients,_appointments)=(bills,billItems,payments,patients,appointments);
+    public async Task<IEnumerable<BillListDto>> GetBillsAsync()
+    {
+        var patients = (await _patients.GetAllAsync()).ToDictionary(x => x.Id, x => $"{x.FirstName} {x.LastName}".Trim());
+        var payments = await _payments.GetAllAsync();
+        return (await _bills.GetAllAsync()).OrderByDescending(x => x.BillDate).ThenByDescending(x => x.Id).Select(x => new BillListDto { Id=x.Id, BillNumber=x.BillNumber, PatientId=x.PatientId, PatientName=patients.GetValueOrDefault(x.PatientId, "Unknown"), BillDate=x.BillDate, NetAmount=x.NetAmount, PaidAmount=payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), Balance=x.NetAmount-payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), PaymentStatus=x.PaymentStatus });
+    }
     public async Task<int> CreateBillAsync(CreateBillDto dto)
     {
         if (!await _patients.ExistsAsync(dto.PatientId)) throw new ArgumentException("Select a valid patient."); if (dto.AppointmentId.HasValue && !await _appointments.ExistsAsync(dto.AppointmentId.Value)) throw new ArgumentException("Select a valid appointment.");

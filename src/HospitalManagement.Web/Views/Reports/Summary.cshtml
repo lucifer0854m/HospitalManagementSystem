@@ -1,0 +1,20 @@
+@model HospitalManagement.Application.DTOs.ReportDto
+@{ ViewData["Title"] = "Date-range report"; var from = (DateTime?)ViewData["From"] ?? DateTime.UtcNow.Date.AddDays(-30); var to = (DateTime?)ViewData["To"] ?? DateTime.UtcNow.Date; }
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="h3 mb-1">Date-range report</h1><p class="text-muted mb-0">Appointments, laboratory, billing, and payment totals.</p></div><a asp-action="Index" class="btn btn-outline-secondary">Dashboard</a></div>
+<form method="get" class="row g-3 align-items-end mb-4">
+    <div class="col-sm-4"><label class="form-label" for="from">From</label><input id="from" name="from" type="date" value="@from.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-sm-4"><label class="form-label" for="to">To</label><input id="to" name="to" type="date" value="@to.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-sm-4"><button class="btn btn-primary" type="submit">Generate report</button></div>
+</form>
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+@if (Model is not null)
+{
+    <div class="alert alert-light border">Reporting period: <strong>@Model.From.ToString("dd MMM yyyy")</strong> to <strong>@Model.To.ToString("dd MMM yyyy")</strong></div>
+    <div class="row g-3">
+        <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted small">Appointments</div><div class="display-6">@Model.Appointments</div><div class="small text-muted">Completed: @Model.CompletedAppointments</div></div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted small">Lab requests</div><div class="display-6">@Model.LabRequests</div></div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body"><div class="text-muted small">Billed amount</div><div class="display-6">@Model.BilledAmount.ToString("N2")</div></div></div></div>
+        <div class="col-md-6"><div class="card h-100 border-success"><div class="card-body"><div class="text-muted small">Payments received</div><div class="display-6">@Model.PaidAmount.ToString("N2")</div></div></div></div>
+        <div class="col-md-6"><div class="card h-100 border-warning"><div class="card-body"><div class="text-muted small">Outstanding from period billing</div><div class="display-6">@((Model.BilledAmount - Model.PaidAmount).ToString("N2"))</div></div></div></div>
+    </div>
+}

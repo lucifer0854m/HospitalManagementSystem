@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hospital-management-config
+data:
+  ASPNETCORE_ENVIRONMENT: Production
+  Database__ApplyMigrations: "false"
+  Identity__SeedOnStartup: "false"
