@@ -10,19 +10,23 @@ namespace HospitalManagement.Web.Controllers;
 [Authorize(Roles = HospitalRoles.Admin + "," + HospitalRoles.Doctor + "," + HospitalRoles.Receptionist)]
 public class PatientsController : Controller
 {
+    // Patient views predate the pluralized controller name and live in Views/Patient.
+    // Use their explicit path so MVC does not search the non-existent Views/Patients folder.
+    private const string PatientViewPath = "~/Views/Patient/";
+
     private readonly IPatientService _patientService;
 
     public PatientsController(IPatientService patientService) => _patientService = patientService;
 
-    public async Task<IActionResult> Index() => View(await _patientService.GetAllAsync());
+    public async Task<IActionResult> Index() => View(PatientView("Index"), await _patientService.GetAllAsync());
 
-    public IActionResult Create() => View(new CreatePatientDto());
+    public IActionResult Create() => View(PatientView("Create"), new CreatePatientDto());
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreatePatientDto patient)
     {
-        if (!ModelState.IsValid) return View(patient);
+        if (!ModelState.IsValid) return View(PatientView("Create"), patient);
         try
         {
             await _patientService.CreateAsync(patient);
@@ -32,19 +36,19 @@ public class PatientsController : Controller
         catch (ArgumentException exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View(patient);
+            return View(PatientView("Create"), patient);
         }
         catch (InvalidOperationException exception)
         {
             ModelState.AddModelError(nameof(patient.PatientCode), exception.Message);
-            return View(patient);
+            return View(PatientView("Create"), patient);
         }
     }
 
     public async Task<IActionResult> Details(int id)
     {
         var patient = await _patientService.GetByIdAsync(id);
-        return patient is null ? NotFound() : View(patient);
+        return patient is null ? NotFound() : View(PatientView("Details"), patient);
     }
 
     public async Task<IActionResult> Edit(int id)
@@ -52,7 +56,7 @@ public class PatientsController : Controller
         var patient = await _patientService.GetByIdAsync(id);
         if (patient is null) return NotFound();
 
-        return View(new UpdatePatientDto
+        return View(PatientView("Edit"), new UpdatePatientDto
         {
             Id = patient.Id, PatientCode = patient.PatientCode,
             FirstName = patient.FirstName, LastName = patient.LastName,
@@ -76,7 +80,7 @@ public class PatientsController : Controller
     public async Task<IActionResult> Edit(int id, UpdatePatientDto patient)
     {
         if (id != patient.Id) return NotFound();
-        if (!ModelState.IsValid) return View(patient);
+        if (!ModelState.IsValid) return View(PatientView("Edit"), patient);
         try
         {
             await _patientService.UpdateAsync(patient);
@@ -87,19 +91,19 @@ public class PatientsController : Controller
         catch (ArgumentException exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View(patient);
+            return View(PatientView("Edit"), patient);
         }
         catch (InvalidOperationException exception)
         {
             ModelState.AddModelError(nameof(patient.PatientCode), exception.Message);
-            return View(patient);
+            return View(PatientView("Edit"), patient);
         }
     }
 
     public async Task<IActionResult> Delete(int id)
     {
         var patient = await _patientService.GetByIdAsync(id);
-        return patient is null ? NotFound() : View(patient);
+        return patient is null ? NotFound() : View(PatientView("Delete"), patient);
     }
 
     [HttpPost, ActionName("Delete")]
@@ -114,4 +118,6 @@ public class PatientsController : Controller
         }
         catch (KeyNotFoundException) { return NotFound(); }
     }
+
+    private static string PatientView(string name) => $"{PatientViewPath}{name}.cshtml";
 }

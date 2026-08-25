@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
+ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
+    DOTNET_CLI_TELEMETRY_OPTOUT=true \
+    MSBUILDSINGLELOADCONTEXT=1
 COPY ["HospitalManagementSystem.sln", "./"]
 COPY ["src/HospitalManagement.Domain/HospitalManagement.Domain.csproj", "src/HospitalManagement.Domain/"]
 COPY ["src/HospitalManagement.Application/HospitalManagement.Application.csproj", "src/HospitalManagement.Application/"]
@@ -7,7 +10,7 @@ COPY ["src/HospitalManagement.Infrastructure/HospitalManagement.Infrastructure.c
 COPY ["src/HospitalManagement.Web/HospitalManagement.Web.csproj", "src/HospitalManagement.Web/"]
 RUN dotnet restore "src/HospitalManagement.Web/HospitalManagement.Web.csproj"
 COPY . .
-RUN dotnet publish "src/HospitalManagement.Web/HospitalManagement.Web.csproj" -c Release -o /app/publish --no-restore
+RUN rm -f obj/project.assets.json obj/project.nuget.cache && dotnet publish "src/HospitalManagement.Web/HospitalManagement.Web.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
