@@ -13,12 +13,18 @@ public class BillingService : IBillingService
     {
         var patients = (await _patients.GetAllAsync()).ToDictionary(x => x.Id, x => $"{x.FirstName} {x.LastName}".Trim());
         var payments = await _payments.GetAllAsync();
-        return (await _bills.GetAllAsync()).OrderByDescending(x => x.BillDate).ThenByDescending(x => x.Id).Select(x => new BillListDto { Id=x.Id, BillNumber=x.BillNumber, PatientId=x.PatientId, PatientName=patients.GetValueOrDefault(x.PatientId, "Unknown"), BillDate=x.BillDate, NetAmount=x.NetAmount, PaidAmount=payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), Balance=x.NetAmount-payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), PaymentStatus=x.PaymentStatus });
+        return (await _bills.GetAllAsync()).OrderByDescending(x => x.BillDate).ThenByDescending(x => x.Id).Select(x => new BillListDto { Id=x.Id, BillNumber=x.BillNumber, PatientId=x.PatientId, AppointmentId=x.AppointmentId, PatientName=patients.GetValueOrDefault(x.PatientId, "Unknown"), BillDate=x.BillDate, NetAmount=x.NetAmount, PaidAmount=payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), Balance=x.NetAmount-payments.Where(p=>p.BillId==x.Id).Sum(p=>p.Amount), PaymentStatus=x.PaymentStatus });
     }
     public async Task<int> CreateBillAsync(CreateBillDto dto)
     {
         if (dto.Items.Count == 0) throw new ArgumentException("Add at least one bill item.");
-        if (!await _patients.ExistsAsync(dto.PatientId)) throw new ArgumentException("Select a valid patient."); if (dto.AppointmentId.HasValue && !await _appointments.ExistsAsync(dto.AppointmentId.Value)) throw new ArgumentException("Select a valid appointment.");
+        if (!await _patients.ExistsAsync(dto.PatientId)) throw new ArgumentException("Select a valid patient.");
+        if (dto.AppointmentId.HasValue)
+        {
+            var appointment = await _appointments.GetByIdAsync(dto.AppointmentId.Value) ?? throw new ArgumentException("Select a valid appointment.");
+            if (appointment.PatientId != dto.PatientId) throw new ArgumentException("The appointment must belong to the selected patient.");
+            if ((await _bills.FindAsync(x => x.AppointmentId == dto.AppointmentId.Value)).Any()) throw new InvalidOperationException("A bill already exists for this appointment.");
+        }
         if ((await _bills.FindAsync(x=>x.BillNumber==dto.BillNumber.Trim())).Any()) throw new InvalidOperationException("A bill with this number already exists.");
         var total=dto.Items.Sum(x=>x.Quantity*x.UnitPrice); if(dto.Discount>total+dto.TaxAmount) throw new ArgumentException("Discount cannot exceed the bill total.");
         var bill=new Bill{BillNumber=dto.BillNumber.Trim(),PatientId=dto.PatientId,AppointmentId=dto.AppointmentId,BillDate=dto.BillDate,TotalAmount=total,Discount=dto.Discount,TaxAmount=dto.TaxAmount,NetAmount=total-dto.Discount+dto.TaxAmount,PaymentStatus=PaymentStatus.Pending,CreatedOn=DateTime.UtcNow}; await _bills.AddAsync(bill); await _bills.SaveChangesAsync();

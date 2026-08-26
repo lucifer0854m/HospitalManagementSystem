@@ -30,5 +30,12 @@ public class BillingController : Controller
         catch (Exception e) when (e is ArgumentException or KeyNotFoundException) { TempData["ErrorMessage"] = e.Message; }
         return RedirectToAction(nameof(Index));
     }
-    private async Task<BillingIndexViewModel> BuildIndexAsync(CreateBillDto? bill = null) { ViewBag.Patients = await _patients.GetAllAsync(); ViewBag.Appointments = await _appointments.GetAllAsync(); return new BillingIndexViewModel { NewBill = bill ?? new CreateBillDto { Items = [new BillLineDto()] }, Bills = await _billing.GetBillsAsync() }; }
+    private async Task<BillingIndexViewModel> BuildIndexAsync(CreateBillDto? bill = null)
+    {
+        var bills = await _billing.GetBillsAsync();
+        var billedAppointmentIds = bills.Where(x => x.AppointmentId.HasValue).Select(x => x.AppointmentId!.Value).ToHashSet();
+        ViewBag.Patients = await _patients.GetAllAsync();
+        ViewBag.Appointments = (await _appointments.GetAllAsync()).Where(x => !billedAppointmentIds.Contains(x.Id));
+        return new BillingIndexViewModel { NewBill = bill ?? new CreateBillDto { Items = [new BillLineDto()] }, Bills = bills };
+    }
 }

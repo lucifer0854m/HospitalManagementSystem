@@ -39,6 +39,14 @@ public class PatientService : IPatientService
     public async Task CreateAsync(CreatePatientDto dto)
     {
         await ValidatePatientAsync(dto.PatientCode, dto.DateOfBirth);
+        ValidateRequiredFields(
+            (dto.Address, "Address"),
+            (dto.City, "City"),
+            (dto.State, "State"),
+            (dto.Country, "Country"),
+            (dto.Pincode, "Pincode"),
+            (dto.EmergencyContactName, "Emergency contact name"),
+            (dto.EmergencyContactNumber, "Emergency contact number"));
 
         var patient = _mapper.Map<Patient>(dto);
         patient.PatientCode = dto.PatientCode.Trim();
@@ -59,6 +67,14 @@ public class PatientService : IPatientService
             throw new KeyNotFoundException("Patient not found.");
 
         await ValidatePatientAsync(dto.PatientCode, dto.DateOfBirth, dto.Id);
+        ValidateRequiredFields(
+            (dto.Address, "Address"),
+            (dto.City, "City"),
+            (dto.State, "State"),
+            (dto.Country, "Country"),
+            (dto.Pincode, "Pincode"),
+            (dto.EmergencyContactName, "Emergency contact name"),
+            (dto.EmergencyContactNumber, "Emergency contact number"));
 
         _mapper.Map(dto, patient);
         patient.PatientCode = dto.PatientCode.Trim();
@@ -94,5 +110,12 @@ public class PatientService : IPatientService
         var existingPatient = await _patientRepository.GetByPatientCodeAsync(patientCode.Trim());
         if (existingPatient is not null && existingPatient.Id != currentPatientId)
             throw new InvalidOperationException("A patient with this patient code already exists.");
+    }
+
+    private static void ValidateRequiredFields(params (string? Value, string Name)[] fields)
+    {
+        foreach (var (value, name) in fields)
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException($"{name} is required.");
     }
 }

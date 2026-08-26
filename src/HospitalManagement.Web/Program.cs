@@ -9,11 +9,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Threading.RateLimiting;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var dataProtectionKeyDirectory = builder.Configuration["DataProtection:KeysDirectory"];
+if (!string.IsNullOrWhiteSpace(dataProtectionKeyDirectory))
+{
+    Directory.CreateDirectory(dataProtectionKeyDirectory);
+    builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeyDirectory));
+}
 
 // Keep logs portable across local development, containers, CI, and cloud hosts.
 builder.Logging.ClearProviders();
@@ -135,7 +144,8 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseHttpsRedirection();
+if (app.Configuration.GetValue("Security:UseHttpsRedirection", true))
+    app.UseHttpsRedirection();
 
 app.UseRouting();
 

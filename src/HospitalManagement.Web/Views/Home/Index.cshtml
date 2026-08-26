@@ -1,8 +1,24 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model HospitalManagement.Application.DTOs.DashboardDto
+@{
+    ViewData["Title"] = "Dashboard";
+    var greeting = DateTime.Now.Hour < 12 ? "Good morning" : DateTime.Now.Hour < 18 ? "Good afternoon" : "Good evening";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Hospital Management System</h1>
-    <p class="lead">Developed & Maintained by <strong>Deepak Lodhi</strong></p>
-</div>
+<section class="dashboard-hero mb-4">
+    <div><p class="dashboard-eyebrow mb-2"><i class="bi bi-activity"></i> Operations overview</p><h1>@greeting, @User.Identity?.Name</h1><p class="mb-0">Here’s what’s happening across your hospital today.</p></div>
+    <div class="dashboard-date"><i class="bi bi-calendar3"></i><span>@DateTime.Today.ToString("dddd, dd MMMM yyyy")</span></div>
+</section>
+<section class="row g-3 mb-4" aria-label="Hospital metrics">
+    <div class="col-sm-6 col-xl-3"><article class="metric-card metric-primary"><div class="metric-icon"><i class="bi bi-people"></i></div><div><p>Total patients</p><h2>@Model.TotalPatients.ToString("N0")</h2><span>Registered in the system</span></div></article></div>
+    <div class="col-sm-6 col-xl-3"><article class="metric-card metric-success"><div class="metric-icon"><i class="bi bi-heart-pulse"></i></div><div><p>Medical staff</p><h2>@Model.TotalDoctors.ToString("N0")</h2><span>Doctors available</span></div></article></div>
+    <div class="col-sm-6 col-xl-3"><article class="metric-card metric-info"><div class="metric-icon"><i class="bi bi-calendar-check"></i></div><div><p>Appointments today</p><h2>@Model.TodayAppointments.ToString("N0")</h2><span>Scheduled consultations</span></div></article></div>
+    <div class="col-sm-6 col-xl-3"><article class="metric-card metric-warning"><div class="metric-icon"><i class="bi bi-flask"></i></div><div><p>Pending lab work</p><h2>@Model.PendingLabRequests.ToString("N0")</h2><span>Requests awaiting completion</span></div></article></div>
+</section>
+<section class="row g-4">
+    <div class="col-lg-7"><article class="dashboard-panel h-100"><div class="panel-heading"><div><p class="panel-kicker">Financial snapshot</p><h2>Collections today</h2></div><a asp-controller="Billing" asp-action="Index" class="btn btn-sm btn-outline-primary">Open billing <i class="bi bi-arrow-right"></i></a></div><div class="revenue-value">@Model.TodayRevenue.ToString("N2") <span>collected today</span></div><div class="revenue-visual" aria-hidden="true"><span style="height:44%"></span><span style="height:62%"></span><span style="height:49%"></span><span style="height:78%"></span><span style="height:57%"></span><span style="height:92%"></span><span style="height:72%"></span></div><div class="revenue-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Today</span></div></article></div>
+    <div class="col-lg-5"><article class="dashboard-panel h-100"><div class="panel-heading"><div><p class="panel-kicker">Quick actions</p><h2>Get things moving</h2></div></div><div class="quick-actions">
+        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Receptionist")) { <a asp-controller="Appointments" asp-action="Create"><i class="bi bi-calendar-plus"></i><span>New appointment<small>Schedule a consultation</small></span><i class="bi bi-chevron-right"></i></a> }
+        @if (User.IsInRole("Admin") || User.IsInRole("Receptionist")) { <a asp-controller="Patients" asp-action="Create"><i class="bi bi-person-plus"></i><span>Register patient<small>Create a patient record</small></span><i class="bi bi-chevron-right"></i></a><a asp-controller="Billing" asp-action="Index"><i class="bi bi-receipt"></i><span>Create bill<small>Manage payments and invoices</small></span><i class="bi bi-chevron-right"></i></a> }
+        @if (User.IsInRole("Admin") || User.IsInRole("Pharmacist")) { <a asp-controller="Pharmacy" asp-action="Index"><i class="bi bi-capsule"></i><span>Pharmacy inventory<small>Review stock and medicines</small></span><i class="bi bi-chevron-right"></i></a> }
+    </div></article></div>
+</section>

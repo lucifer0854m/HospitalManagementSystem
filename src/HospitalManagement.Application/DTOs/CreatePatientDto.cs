@@ -33,20 +33,32 @@ public class CreatePatientDto
     [EmailAddress]
     public string? Email { get; set; }
 
+    [Required]
+    [StringLength(250)]
     public string? Address { get; set; }
 
+    [Required]
+    [StringLength(100)]
     public string? City { get; set; }
 
+    [Required]
+    [StringLength(100)]
     public string? State { get; set; }
 
-    public string? Country { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string? Country { get; set; } = "India";
 
+    [Required]
+    [StringLength(10)]
     public string? Pincode { get; set; }
 
     [StringLength(100)]
+    [Required]
     public string? EmergencyContactName { get; set; }
 
     [StringLength(15)]
+    [Required]
     public string? EmergencyContactNumber { get; set; }
 
     [StringLength(100)]

@@ -48,8 +48,34 @@ public class PatientServiceTests
         repository.Verify(x => x.SaveChangesAsync(), Times.Once);
     }
 
+    [Fact]
+    public async Task CreateAsync_WithoutAddress_ThrowsAndDoesNotSave()
+    {
+        var repository = new Mock<IPatientRepository>();
+        repository.Setup(x => x.GetByPatientCodeAsync("P-004")).ReturnsAsync((Patient?)null);
+        var service = new PatientService(repository.Object, TestHelpers.Mapper);
+        var patient = CreateDto("P-004");
+        patient.Address = null;
+
+        await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(patient));
+
+        repository.Verify(x => x.AddAsync(It.IsAny<Patient>()), Times.Never);
+        repository.Verify(x => x.SaveChangesAsync(), Times.Never);
+    }
+
     private static CreatePatientDto CreateDto(string code, DateTime? dob = null) => new()
     {
-        PatientCode = code, FirstName = " Jane ", LastName = " Doe ", DateOfBirth = dob ?? new DateTime(1990, 1, 1), MobileNumber = "9999999999"
+        PatientCode = code,
+        FirstName = " Jane ",
+        LastName = " Doe ",
+        DateOfBirth = dob ?? new DateTime(1990, 1, 1),
+        MobileNumber = "9999999999",
+        Address = "1 Main Street",
+        City = "Bhopal",
+        State = "Madhya Pradesh",
+        Country = "India",
+        Pincode = "462001",
+        EmergencyContactName = "John Doe",
+        EmergencyContactNumber = "9888888888"
     };
 }

@@ -61,6 +61,25 @@ public class ExtendedModuleServiceTests
     }
 
     [Fact]
+    public async Task CreateBillAsync_RejectsAppointmentThatAlreadyHasABill()
+    {
+        var bills = new Mock<IGenericRepository<Bill>>();
+        var patients = new Mock<IGenericRepository<Patient>>();
+        var appointments = new Mock<IGenericRepository<Appointment>>();
+        patients.Setup(x => x.ExistsAsync(2)).ReturnsAsync(true);
+        appointments.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(new Appointment { Id = 1, PatientId = 2 });
+        var existingBill = new Bill { BillNumber = "B-EXISTING", AppointmentId = 1 };
+        bills.Setup(x => x.FindAsync(It.IsAny<System.Linq.Expressions.Expression<Func<Bill, bool>>>() ))
+            .ReturnsAsync((System.Linq.Expressions.Expression<Func<Bill, bool>> predicate) => predicate.Compile()(existingBill) ? [existingBill] : []);
+        var service = new BillingService(bills.Object, Mock.Of<IGenericRepository<BillItem>>(), Mock.Of<IGenericRepository<Payment>>(), patients.Object, appointments.Object);
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateBillAsync(new CreateBillDto { BillNumber = "B-NEW", PatientId = 2, AppointmentId = 1, Items = [new BillLineDto { ItemName = "Consultation", Quantity = 1, UnitPrice = 500 }] }));
+
+        Assert.Equal("A bill already exists for this appointment.", exception.Message);
+        bills.Verify(x => x.AddAsync(It.IsAny<Bill>()), Times.Never);
+    }
+
+    [Fact]
     public async Task SaveMedicineAsync_RejectsDuplicateCode()
     {
         var medicines = new Mock<IGenericRepository<Medicine>>();
